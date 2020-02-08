@@ -1,0 +1,77 @@
+version: 0.0.0.{build}
+
+pull_requests:
+  do_not_increment_build_number: true
+
+branches:
+  only:
+    - master
+
+skip_non_tags: false
+
+skip_tags: true
+
+image: Visual Studio 2015
+
+build: off
+
+shallow_clone: true
+
+clone_depth: 1
+
+clone_folder: C:\projects\onepage
+
+environment:
+  APPVEYOR_SKIP_FINALIZE_ON_EXIT: false
+  PYTHONUNBUFFERED: 1
+  BUILD_VERSION: "0.1.0"
+  matrix:
+    - PYTHON: C:\Python36-x64
+      PYTHON_VERSION: 3.6.6
+      PYTHON_ARCH: 64
+
+install:
+  # ---------------------------------------- 64-bit build ----------------------------------------
+
+  - set PATH=%PYTHONHOME%;%PYTHONHOME%\Scripts;%PYTHONHOME%\tools\scripts;%PATH%
+  - cd C:\projects\onepage
+  - curl -L -fsS -o onepage.tar.gz https://github.com/namuan/one-page/archive/%BUILD_VERSION%.tar.gz
+  - 7z x onepage.tar.gz
+  - 7z x onepage.tar
+  - move one-page-%BUILD_VERSION% onepage
+  - cd onepage
+  
+  # Installing latest pip + dependencies
+  - "%PYTHON%\\python.exe -m pip install -U pip"
+  - "%PYTHON%\\python.exe -m pip install -r requirements\\build.txt"
+  
+  # Setup build environment for MSVC++
+  - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
+
+  # Freezing w/ PyInstaller
+  - cd C:\projects\onepage\pyinstaller
+  - call build.pyinstaller.win.bat 64 %PFX_PASSWORD%
+  - cd ..
+  - move pyinstaller\dist\onepage.exe .
+
+  # Building artifact
+  - 7z a -tzip onepage-win-%BUILD_VERSION%.zip onepage.exe -mx0
+  - appveyor PushArtifact onepage-win-%BUILD_VERSION%.zip
+
+nuget:
+  disable_publish_on_pr: true
+
+test: off
+
+deploy:
+  release: $(BUILD_VERSION)
+  description: 'OnePage Windows Release $(BUILD_VERSION)'
+  provider: GitHub
+  auth_token:
+    secure: qUFnrgAfsyPKWtP1gMPZHpv2KXLqQDosCrt3cZVG7ZlVpALn4yn7Y4WwWo4xhI3E
+  artifact: onepage-win-$(BUILD_VERSION).zip
+  draft: false
+  prerelease: false
+  on:
+    branch: master

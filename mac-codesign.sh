@@ -4,7 +4,7 @@ ID="Developer ID Application: Nauman Leghari (Z8242PZ338)"
 
 for filename in $(find dist/OnePage.app -name "*.dylib"); do
 	echo "Signing $filename"
-    # codesign -v -f -i "dev.deskriders.onepage" -s "$ID" $filename
+    codesign -v -f -i "dev.deskriders.onepage" -s "$ID" $filename
 done
 
 for filename in $(find dist/OnePage.app -name "*.so"); do

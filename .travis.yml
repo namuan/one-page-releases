@@ -30,7 +30,6 @@ install:
 script:
 - make package
 - ./import_cert.sh
-- ./mac-codesign.sh
 - cd dist && zip "${TRAVIS_BUILD_DIR}"/onepage-macos-${BUILD_VERSION}.zip -r onepage.app && cd ..
 - echo "Done!"
 

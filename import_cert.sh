@@ -5,7 +5,7 @@ security create-keychain -p $OSX_CERTIFICATE_P12_PWD $KEYCHAIN;
 security default-keychain -s $KEYCHAIN;
 security unlock-keychain -p $OSX_CERTIFICATE_P12_PWD $KEYCHAIN;
 security import $CERTIFICATE_P12 -k $KEYCHAIN -P $OSX_CERTIFICATE_P12_PWD -T /usr/bin/codesign;
-security set-key-partition-list -S apple-tool:,apple: -s -k travis $KEYCHAIN
+security set-key-partition-list -S apple-tool:,apple: -s -k $OSX_CERTIFICATE_P12_PWD $KEYCHAIN
 
 ./mac-codesign.sh
 

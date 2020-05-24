@@ -11,7 +11,7 @@ branches:
 
 env:
   global:
-  - BUILD_VERSION="0.3.0"
+  - BUILD_VERSION="0.4.0"
 
 before_install:
 - brew install python3
@@ -29,6 +29,8 @@ install:
 
 script:
 - make package
+- ./import_cert.sh
+- ./mac-codesign.sh "${DEVELOPER_ID}""
 - cd dist && zip "${TRAVIS_BUILD_DIR}"/onepage-macos-${BUILD_VERSION}.zip -r onepage.app && cd ..
 - echo "Done!"
 

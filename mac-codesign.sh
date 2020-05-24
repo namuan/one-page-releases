@@ -3,17 +3,22 @@ echo "###### OnePage Code Signing ###############"
 ID="Developer ID Application: Nauman Leghari (Z8242PZ338)"
 
 for filename in $(find dist/OnePage.app/ -name "*.dylib"); do
+	echo "Signing $filename"
     codesign -v -f -s "$ID" $filename
 done
+
 for filename in $(find dist/OnePage.app/ -name "*.so"); do
+    echo "Signing $filename"
     codesign -v -f -s "$ID" $filename
 done
 
 for filename in $(find dist/OnePage.app/Contents/MacOS -name "Qt*"); do
+    echo "Signing $filename"
     codesign -v -f -s "$ID" $filename
 done
 
 for filename in $(ls dist/OnePage.app/Contents/MacOS/PyQt5/Qt/translations/*); do
+    echo "Signing $filename"
     codesign -v -f -s "$ID" $filename
 done
 

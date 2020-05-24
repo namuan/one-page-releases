@@ -35,7 +35,7 @@ for filename in $(ls dist/OnePage.app/Contents/MacOS/PyQt5/Qt/translations/*); d
     codesign -v -f -i "dev.deskriders.onepage" -s "$ID" $filename
 done
 
-codesign -v -f -s "$ID" /Users/nmn/workspace/one-page/dist/OnePage.app/Contents/MacOS/base_library.zip
+codesign -v -f -s "$ID" dist/OnePage.app/Contents/MacOS/base_library.zip
 
 codesign -v -f --entitlements entitlements.plist -s "$ID" dist/OnePage.app/Contents/MacOS/python
 codesign -v -f --entitlements entitlements.plist -s "$ID" dist/OnePage.app/Contents/MacOS/app

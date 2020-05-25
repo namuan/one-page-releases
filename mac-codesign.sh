@@ -20,12 +20,15 @@ done
 
 codesign -v -f -s "$ID" dist/OnePage.app/Contents/MacOS/base_library.zip
 
-codesign -v -f --entitlements entitlements.plist -s "$ID" dist/OnePage.app/Contents/MacOS/python
-codesign -v -f --entitlements entitlements.plist -s "$ID" dist/OnePage.app/Contents/MacOS/app
-codesign -v -f --entitlements entitlements.plist -s "$ID" dist/OnePage.app
+echo "Signing python"
+codesign -v -f -o runtime --timestamp --entitlements entitlements.plist -s "$ID" dist/OnePage.app/Contents/MacOS/python
+echo "Signing app"
+codesign -v -f -o runtime --timestamp --entitlements entitlements.plist -s "$ID" dist/OnePage.app/Contents/MacOS/app
+echo "Signing OnePage.app"
+codesign -v -f -o runtime --timestamp --entitlements entitlements.plist -s "$ID" dist/OnePage.app
 
 # Add verification
-# spctl --raw -vvv --assess --type exec dist/OnePage.app
+#spctl --raw -vvv --assess --type exec dist/OnePage.app
 
 # remove certs
 rm -fr *.p12

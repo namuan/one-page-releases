@@ -16,8 +16,8 @@ env:
   - PATH=$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 
 before_install:
-- brew update > /dev/null
-- brew upgrade
+# - brew update > /dev/null
+# - brew upgrade
 - brew upgrade pyenv || brew install pyenv
 - PYTHON_CONFIGURE_OPTS="--enable-framework" pyenv install $PYTHON_VERSION
 - pyenv global $PYTHON_VERSION
